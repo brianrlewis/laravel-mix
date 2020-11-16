@@ -2,6 +2,8 @@ let { VueLoaderPlugin } = require('vue-loader');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let collect = require('collect.js');
 
+// Custom Fix - v2
+
 class Vue {
     /**
      * Required dependencies for the component.
@@ -45,9 +47,13 @@ class Vue {
     updateCssLoaders(webpackConfig) {
         // Basic CSS and PostCSS
         this.updateCssLoader('css', webpackConfig, rule => {
-            rule.loaders.find(
-                loader => loader.loader === 'postcss-loader'
-            ).options = this.postCssOptions();
+            rule.oneOf.forEach(
+                subrule => {
+                    subrule.use.find(
+                        loader => loader.loader === 'postcss-loader'
+                    ).options = this.postCssOptions();
+                }
+            )
         });
 
         // LESS
@@ -56,9 +62,13 @@ class Vue {
         // SASS
         let sassCallback = rule => {
             if (Mix.seesNpmPackage('sass')) {
-                rule.loaders.find(
-                    loader => loader.loader === 'sass-loader'
-                ).options.implementation = require('sass');
+                rule.oneOf.forEach(
+                    subrule => {
+                        subrule.use.find(
+                            loader => loader.loader === 'sass-loader'
+                        ).options.implementation = require('sass');
+                    }
+                )
             }
 
             if (Config.globalVueStyles) {
