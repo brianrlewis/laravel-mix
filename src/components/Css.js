@@ -1,5 +1,7 @@
 let AutomaticComponent = require('./AutomaticComponent');
 
+// Custom Fix
+
 class Css extends AutomaticComponent {
     /**
      * webpack rules to be appended to the master config.
@@ -10,7 +12,7 @@ class Css extends AutomaticComponent {
                 test: /\.css$/,
                 loaders: [
                     'style-loader',
-                    { loader: 'css-loader', options: { importLoaders: 1 } },
+                    { loader: 'css-loader', options: { importLoaders: 1, modules: Config.enableCssModules } },
                     {
                         loader: 'postcss-loader',
                         options: this.postCssOptions()
@@ -23,7 +25,7 @@ class Css extends AutomaticComponent {
                 exclude: this.excludePathsFor('sass'),
                 loaders: [
                     'style-loader',
-                    'css-loader',
+                    { loader: 'css-loader', options: { modules: Config.enableCssModules } },
                     {
                         loader: 'postcss-loader',
                         options: this.postCssOptions()
@@ -45,7 +47,7 @@ class Css extends AutomaticComponent {
                 exclude: this.excludePathsFor('sass'),
                 loaders: [
                     'style-loader',
-                    'css-loader',
+                    { loader: 'css-loader', options: { modules: Config.enableCssModules } },
                     {
                         loader: 'postcss-loader',
                         options: this.postCssOptions()
